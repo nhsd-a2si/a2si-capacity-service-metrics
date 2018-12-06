@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  jasperserver:
+    image: retriever/jasperserver:7.1.0
+    container_name: jasperserver
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_TYPE=postgresql
+      - DB_HOST=a2si-cd-stage-capacity-service-db.ckg0gmxsawjt.eu-west-2.rds.amazonaws.com
+      - DB_PORT=5432
+      - DB_USER=postmanpat
+      - DB_PASSWORD=FWr2qN3WTdZJ
+      - DB_NAME=a2sicdstageCapacityService
+    volumes:
+      # Relative path on the host/volume on container
+      - ./jasperserver-import:/jasperserver-import
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
